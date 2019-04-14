@@ -1,4 +1,4 @@
-# neural_graph_fingerprint
+# Convolutional Neural Graph Fingerprint
 PyTorch-based Neural Graph Fingerprint for Organic Molecule Representations
 
 This repository is an implementation of [Convolutional Networks on Graphs for Learning Molecular Fingerprints][NGF-paper] in PyTorch.
