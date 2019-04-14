@@ -1,8 +1,6 @@
 # neural_graph_fingerprint
 PyTorch-based Neural Graph Fingerprint for Organic Molecule Representations
 
-# Keras Neural Graph Fingerprint
-
 This repository is an implementation of [Convolutional Networks on Graphs for Learning Molecular Fingerprints][NGF-paper] in Keras.
 
 It includes a preprocessing function to convert molecules in smiles representation
