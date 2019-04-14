@@ -68,22 +68,6 @@ described by a combination of the following three tensors:
 As molecules have different numbers of atoms, max_atoms needs to be defined for
 the entire dataset. Unused atom columns are masked by 0 vectors.
 
-### Strong and weak points
-The obvious downside of this representation is that there is a lot of masking,
-resulting in a waste of computation power.
-
-The alternative is to represent the entire dataset as a bag of atoms as in the
-authors [original implementation](https://github.com/HIPS/neural-fingerprint). For
-larger datasets, this is infeasable. In [keiserlab's implementation] (https://github.com/keiserlab/keras-neural-graph-fingerprint)
-the same approach is used, but each batch is pre-calculated as a bag of atoms.
-The downside of this is that each epoch uses the exact same composition of batches,
-decreasing the stochasticity. Furthermore, Keras recognises the variability in batch-
-size and will not run. In his implementation GUR9000 included a modified version
-of Keras to correct for this.
-
-The tensor representation used in this repository does not have these downsides,
-and allows for many modificiations of Duvenauds algorithm (there is a lot to explore).
-
 
 ## Dependencies
 - [**RDKit**](http://www.rdkit.org/) This dependency is nescecairy to convert molecules into tensor
