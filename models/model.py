@@ -77,5 +77,6 @@ class QSAR(nn.Module):
             y_ = self.forward(Ab, Bb, Eb).data.cpu()
             ix = yb == yb
             yb, y_ = yb[ix], y_[ix]
-            score += [(y[0], y_[i][0]) for i, y in enumerate(yb.data.cpu())]
-        return np.array(score)
+            score.append(y_.detach().cpu())
+        score = T.cat(score, dim=0).numpy()
+        return score
