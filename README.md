@@ -72,7 +72,8 @@ the entire dataset. Unused atom columns are masked by 0 vectors.
 representatins, once this step is conducted, the new data can be stored, and RDkit
 is no longer a dependency.
 - [**PyTorch**](https://PyTorch.org/) Requires PyTorch 1.0 for building, training and evaluating the models.
-- [**NumPy**](http://www.numpy.org/)
+- [**NumPy**](http://www.numpy.org/) Requires Numpy >= 0.19
+- [**Pandas**](http://www.pandas.org) Optional for examples
 
 ## Acknowledgements
 - Implementation is based on [Duvenaud et al., 2015][NGF-paper].
