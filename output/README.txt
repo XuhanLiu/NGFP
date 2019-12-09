@@ -1,0 +1,1 @@
+This folder is used for storing the results ran by example.py by default
