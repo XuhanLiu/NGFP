@@ -5,7 +5,7 @@ from models.dataset import MolData
 from models.model import QSAR
 import pandas as pd
 import numpy as np
-import util
+from models import util
 
 
 def main(reg=False, is_extra=True):
