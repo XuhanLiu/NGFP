@@ -5,7 +5,6 @@ from models.dataset import MolData
 from models.model import QSAR
 import pandas as pd
 import numpy as np
-from models import util
 
 
 def main(reg=False, is_extra=True):
@@ -49,7 +48,7 @@ def main(reg=False, is_extra=True):
         valid_set = MolData(cmps.loc[valided.index], valided.values)
         train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
         valid_loader = DataLoader(valid_set, batch_size=BATCH_SIZE)
-        net = QSAR(hid_dim=128, n_class=data.shape[1]).to(util.dev)
+        net = QSAR(hid_dim=128, n_class=data.shape[1]).to(dev)
         net = net.fit(train_loader, valid_loader, epochs=N_EPOCH, path='%s_%d' % (out, i))
         print('Evaluation of Loss in validation Set: %f' % net.evaluate(valid_loader))
         print('Evaluation of Loss in independent Set: %f' % net.evaluate(indep_loader))
@@ -66,6 +65,7 @@ def main(reg=False, is_extra=True):
 
 
 if __name__ == '__main__':
+    dev = torch.Device('cuda') if torch.cuda.is_available() else torch.Device('cpu')
     BATCH_SIZE = 128
     N_EPOCH = 1000
     main()
