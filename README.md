@@ -68,10 +68,10 @@ the entire dataset. Unused atom columns are masked by 0 vectors.
 
 
 ## Dependencies
-- [**RDKit**](http://www.rdkit.org/) This dependency is nescecairy to convert molecules into tensor
+- [**RDKit**](http://www.rdkit.org/) This dependency is necessary to convert molecules into tensor
 representatins, once this step is conducted, the new data can be stored, and RDkit
 is no longer a dependency.
-- [**PyTorch**](https://PyTorch.org/) Requires PyTorch 1.0 for building, training and evaluating the models.
+- [**PyTorch**](https://PyTorch.org/) Requires PyTorch >= 1.0
 - [**NumPy**](http://www.numpy.org/) Requires Numpy >= 0.19
 - [**Pandas**](http://www.pandas.org) Optional for examples
 
