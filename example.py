@@ -1,8 +1,8 @@
 from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader
 
-from NeuralGraph.dataset import MolData
-from NeuralGraph.model import QSAR
+from models.dataset import MolData
+from models.model import QSAR
 import pandas as pd
 import numpy as np
 import util
