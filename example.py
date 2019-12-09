@@ -5,13 +5,14 @@ from NeuralGraph.dataset import MolData
 from NeuralGraph.model import QSAR
 import pandas as pd
 import numpy as np
-import util
 
 
-def main(reg=False, is_extra=True):
+def main(target_id=None, reg=False, is_extra=True):
     pair = ['TARGET_CHEMBLID', 'CMPD_CHEMBLID', 'PCHEMBL_VALUE',
             'CANONICAL_SMILES', 'ACTIVITY_COMMENT', 'STANDARD_TYPE', 'RELATION']
-    df = pd.read_csv('data/AR_ALL.csv')
+    df = pd.read_csv('dataset/AR_ALL.csv')
+    if target_id is not None:
+        df = df[df['TARGET_CHEMBLID'] == target_id]
     cmps = df.set_index(pair[1])[pair[3]].drop_duplicates()
     df = df[pair].set_index(pair[0:2])
     df['PCHEMBL_VALUE'] = df.groupby(pair[0:2]).mean()
@@ -42,14 +43,14 @@ def main(reg=False, is_extra=True):
     folds = KFold(5).split(data)
     cvs = np.zeros(data.shape)
     inds = np.zeros(test.shape)
-    out = 'output/gcn%s' % ('_' + subset if subset else '')
+    out = 'output/gcn%s' % ('_' + target_id if target_id else '')
     for i, (trained, valided) in enumerate(folds):
-        trained, valided = data.iloc[trained], data.iloc[valided]
-        train_set = MolData(cmps.loc[trained.index], trained.values)
-        valid_set = MolData(cmps.loc[valided.index], valided.values)
+        net = QSAR(hid_dim=128, n_class=data.shape[1])
+        train_set, valid_set = data.iloc[trained], data.iloc[valided]
+        train_set = MolData(cmps.loc[train_set.index], train_set.values)
+        valid_set = MolData(cmps.loc[valid_set.index], valid_set.values)
         train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
         valid_loader = DataLoader(valid_set, batch_size=BATCH_SIZE)
-        net = QSAR(hid_dim=128, n_class=data.shape[1]).to(util.dev)
         net = net.fit(train_loader, valid_loader, epochs=N_EPOCH, path='%s_%d' % (out, i))
         print('Evaluation of Loss in validation Set: %f' % net.evaluate(valid_loader))
         print('Evaluation of Loss in independent Set: %f' % net.evaluate(indep_loader))
@@ -60,7 +61,7 @@ def main(reg=False, is_extra=True):
     data_score['LABEL'] = data.stack()
     test_score['LABEL'] = test.stack()
     data_score['SCORE'] = pd.DataFrame(cvs, index=data.index, columns=data.columns).stack()
-    test_score['SCORE'] = pd.DataFrame(inds, index=test.index, columns=test.columns).stack()
+    test_score['SCORE'] = pd.DataFrame(inds / 5, index=test.index, columns=test.columns).stack()
     data_score.to_csv(out + '.cv.txt')
     test_score.to_csv(out + '.ind.txt')
 
@@ -68,4 +69,4 @@ def main(reg=False, is_extra=True):
 if __name__ == '__main__':
     BATCH_SIZE = 128
     N_EPOCH = 1000
-    main()
+    main('CHEMBL251')

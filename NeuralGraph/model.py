@@ -17,6 +17,7 @@ class QSAR(nn.Module):
         # self.bn = nn.BatchNorm2d(80)
         self.pool = GraphPool()
         self.fc2 = nn.Linear(hid_dim, n_class)
+        self.to(dev)
 
     def forward(self, atoms, bonds, edges):
         atoms = self.gcn1(atoms, bonds, edges)
@@ -74,9 +75,7 @@ class QSAR(nn.Module):
         score = []
         for Ab, Bb, Eb, yb in loader:
             Ab, Bb, Eb, yb = Ab.to(dev), Bb.to(dev), Eb.to(dev), yb.to(dev)
-            y_ = self.forward(Ab, Bb, Eb).data.cpu()
-            ix = yb == yb
-            yb, y_ = yb[ix], y_[ix]
-            score.append(y_.detach().cpu())
+            y_ = self.forward(Ab, Bb, Eb)
+            score.append(y_.data.cpu())
         score = T.cat(score, dim=0).numpy()
         return score

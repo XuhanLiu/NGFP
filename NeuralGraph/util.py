@@ -1,6 +1,6 @@
 import torch as T
 import numpy as np
-dev = T.device('cuda')
+dev = T.device('cuda') if T.cuda.is_available() else T.device('cpu')
 
 
 def temporal_padding(x, paddings=(1, 0), pad_value=0):
